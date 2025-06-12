@@ -1,108 +1,115 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Розрахунок заробітку</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
-      background: #f2f2f2;
+      background: linear-gradient(to right, #e0f7fa, #ffe0f0);
     }
-    label, input, p {
-      margin-top: 10px;
-      display: block;
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: flex-start;
+      justify-content: center;
     }
-    #result {
-      margin-top: 20px;
-      background: white;
-      padding: 15px;
+    .calculator, .image-container {
+      background: rgba(255, 255, 255, 0.9);
       border-radius: 10px;
-    }
-  </style>
-</head>
-<body>
-  <h2>Розрахунок заробітку за збирання черешні</h2>
-  <label for="kg">Скільки кг зібрав:</label>
-  <input type="number" id="kg" min="0" step="0.1">
-  <button onclick="calculate()">Розрахувати</button>
-
-  <div id="result"></div>
-
-  <script>
-    const pricePerKgPLN = 2.5;
-    const fixedRate = 10.0; // 1 злотий = 10 грн
-
-    function calculate() {
-      const kg = parseFloat(document.getElementById("kg").value);
-      if (isNaN(kg) || kg <= 0) {
-        alert("Введи правильну кількість кг.");
-        return;
-      }
-
-      const totalPLN = kg * pricePerKgPLN;
-      const totalUAH = totalPLN * fixedRate;
-
-      document.getElementById("result").innerHTML = `
-        <p><strong>Кількість кг:</strong> ${kg.toFixed(2)} кг</p>
-        <p><strong>Оплата за 1 кг:</strong> ${pricePerKgPLN} злотих</p>
-        <p><strong>Сума в злотих:</strong> ${totalPLN.toFixed(2)} zł</p>
-        <p><strong>Сума в гривнях (курс 1 zł = 10 грн):</strong> ${totalUAH.toFixed(2)} грн</p>
-      `;
-    }
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-  <meta charset="UTF-8">
-  <title>Розрахунок заробітку</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
       padding: 20px;
-      background: #f2f2f2;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
-    label, input, p {
+    .calculator {
+      flex: 1;
+      min-width: 300px;
+      max-width: 400px;
+    }
+    .image-container {
+      flex: 1;
+      min-width: 300px;
+      text-align: center;
+    }
+    .image-container img {
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    label, input, button, p {
       margin-top: 10px;
       display: block;
     }
+    input {
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #28a745;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
     #result {
       margin-top: 20px;
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h2>Розрахунок заробітку за збирання черешні</h2>
-  <label for="kg">Скільки кг зібрав:</label>
-  <input type="number" id="kg" min="0" step="0.1">
-  <button onclick="calculate()">Розрахувати</button>
+  <h2 style="text-align:center;">Розрахунок заробітку за збирання черешні</h2>
 
-  <div id="result"></div>
+  <div class="container">
+    <div class="calculator">
+      <label for="kg">Скільки кг зібрав:</label>
+      <input type="number" id="kg" min="0" step="0.1" placeholder="Введіть кількість кг" />
+      <button onclick="calculate()">Розрахувати</button>
+
+      <div id="error" class="error"></div>
+      <div id="result"></div>
+    </div>
+
+    <img src="cherries.jpg" alt="Черешні" style="width: 250px; height: auto;" />
 
   <script>
-    const pricePerKgPLN = 2.5;
-    const fixedRate = 10.0; // 1 злотий = 10 грн
+    const pricePerKg = 2.5;
+    const exchangeRate = 10;
 
     function calculate() {
-      const kg = parseFloat(document.getElementById("kg").value);
+      const kgInput = document.getElementById("kg");
+      const kg = parseFloat(kgInput.value);
+      const errorDiv = document.getElementById("error");
+      const resultDiv = document.getElementById("result");
+
+      errorDiv.textContent = "";
+      resultDiv.innerHTML = "";
+
       if (isNaN(kg) || kg <= 0) {
-        alert("Введи правильну кількість кг.");
+        errorDiv.textContent = "❗ Введіть коректну кількість кг (число більше нуля).";
         return;
       }
 
-      const totalPLN = kg * pricePerKgPLN;
-      const totalUAH = totalPLN * fixedRate;
+      const totalPLN = kg * pricePerKg;
+      const totalUAH = totalPLN * exchangeRate;
 
-      document.getElementById("result").innerHTML = `
+      resultDiv.innerHTML = `
         <p><strong>Кількість кг:</strong> ${kg.toFixed(2)} кг</p>
-        <p><strong>Оплата за 1 кг:</strong> ${pricePerKgPLN} злотих</p>
+        <p><strong>Ціна за 1 кг:</strong> ${pricePerKg.toFixed(2)} злотих</p>
         <p><strong>Сума в злотих:</strong> ${totalPLN.toFixed(2)} zł</p>
-        <p><strong>Сума в гривнях (курс 1 zł = 10 грн):</strong> ${totalUAH.toFixed(2)} грн</p>
+        <p><strong>Курс PLN → UAH:</strong> ${exchangeRate.toFixed(2)}</p>
+        <p><strong>Сума в гривнях:</strong> ${totalUAH.toFixed(2)} грн</p>
       `;
     }
   </script>
